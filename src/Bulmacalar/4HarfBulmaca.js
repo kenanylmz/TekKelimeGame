@@ -280,6 +280,7 @@ NAİF: Saf, temiz kalpli.
 NANE: Güzel kokulu bir bitki; nane yaprağı.
 NEŞE: Mutluluk, sevinç.
 NORM: Standart, kural.
+NOTA: Bir müzik sesini belirtmeye yarayan işaret.
 OBUR: Çok yemek yiyen; doymak bilmeyen.
 OKUL: Eğitim verilen kurum.
 ONUR: Şeref, haysiyet.
