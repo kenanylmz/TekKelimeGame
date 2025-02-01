@@ -16,7 +16,6 @@ import MessageModal from '../components/MessageModal';
 import PuzzleCard from '../components/PuzzleCard';
 import bulmacalar from '../Bulmacalar/4HarfBulmaca';
 import PuzzleButton from '../components/PuzzleButton';
-import GameTransition from '../components/GameTransition';
 
 const {width, height} = Dimensions.get('window');
 
@@ -40,7 +39,6 @@ export default function GameScreen4({navigation}) {
 
   const [showPuzzle, setShowPuzzle] = useState(false);
   const [currentPuzzle, setCurrentPuzzle] = useState(null);
-  const [showTransition, setShowTransition] = useState(true);
 
   const themeStyles = {
     backgroundColor: isDarkMode ? '#1a1a1b' : '#fff',
@@ -140,10 +138,6 @@ export default function GameScreen4({navigation}) {
     setShowPuzzle(true);
   };
 
-  const handleTransitionComplete = () => {
-    setShowTransition(false);
-  };
-
   // Stilleri component içinde oluşturalım
   const getStyles = () =>
     StyleSheet.create({
@@ -230,103 +224,90 @@ export default function GameScreen4({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {showTransition ? (
-        <GameTransition
-          wordLength={4}
-          onAnimationComplete={handleTransitionComplete}
-          isDarkMode={isDarkMode}
-        />
-      ) : (
-        <>
-          <View style={styles.header}>
-            <TouchableOpacity
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={[
+            styles.puzzleButton,
+            {
+              backgroundColor: themeStyles.puzzleButtonBackground,
+              borderColor: isDarkMode ? '#404040' : '#e0e0e0',
+            },
+          ]}
+          onPress={handlePuzzlePress}>
+          <Image
+            source={require('../assets/question.png')}
+            style={[
+              styles.questionIcon,
+              {tintColor: themeStyles.puzzleIconColor},
+            ]}
+          />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={[
+          styles.gradientStrip,
+          styles.gradient1,
+          isDarkMode && {
+            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+          },
+        ]}
+      />
+      <View
+        style={[
+          styles.gradientStrip,
+          styles.gradient2,
+          isDarkMode && {
+            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+          },
+        ]}
+      />
+      <View
+        style={[
+          styles.gradientStrip,
+          styles.gradient3,
+          isDarkMode && {
+            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+          },
+        ]}
+      />
+      <View style={styles.content}>
+        <View style={styles.boardContainer}>
+          <GameBoard wordLength={4} maxAttempts={5} />
+        </View>
+        <View style={styles.keyboardContainer}>
+          <Keyboard navigation={navigation} />
+          {gameOver && (
+            <View
               style={[
-                styles.puzzleButton,
+                styles.gameOverContainer,
                 {
-                  backgroundColor: themeStyles.puzzleButtonBackground,
-                  borderColor: isDarkMode ? '#404040' : '#e0e0e0',
+                  backgroundColor: themeStyles.cardBackground,
                 },
-              ]}
-              onPress={handlePuzzlePress}>
-              <Image
-                source={require('../assets/question.png')}
-                style={[
-                  styles.questionIcon,
-                  {tintColor: themeStyles.puzzleIconColor},
-                ]}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[
-              styles.gradientStrip,
-              styles.gradient1,
-              isDarkMode && {
-                backgroundColor: 'rgba(76, 175, 80, 0.1)',
-              },
-            ]}
-          />
-          <View
-            style={[
-              styles.gradientStrip,
-              styles.gradient2,
-              isDarkMode && {
-                backgroundColor: 'rgba(33, 150, 243, 0.1)',
-              },
-            ]}
-          />
-          <View
-            style={[
-              styles.gradientStrip,
-              styles.gradient3,
-              isDarkMode && {
-                backgroundColor: 'rgba(156, 39, 176, 0.1)',
-              },
-            ]}
-          />
-          <View style={styles.content}>
-            <View style={styles.boardContainer}>
-              <GameBoard wordLength={4} maxAttempts={5} />
+              ]}>
+              <Text
+                style={[styles.gameOverText, {color: themeStyles.textColor}]}>
+                {isGameModeCompleted
+                  ? 'Mod Tamamlandı'
+                  : 'Yeni Oyun Başlıyor...'}
+              </Text>
             </View>
-            <View style={styles.keyboardContainer}>
-              <Keyboard navigation={navigation} />
-              {gameOver && (
-                <View
-                  style={[
-                    styles.gameOverContainer,
-                    {
-                      backgroundColor: themeStyles.cardBackground,
-                    },
-                  ]}>
-                  <Text
-                    style={[
-                      styles.gameOverText,
-                      {color: themeStyles.textColor},
-                    ]}>
-                    {isGameModeCompleted
-                      ? 'Mod Tamamlandı'
-                      : 'Yeni Oyun Başlıyor...'}
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
-          <MessageModal
-            visible={showModal}
-            message={modalMessage}
-            buttonText={modalButtonText}
-            onPress={modalOnPress}
-            success={modalSuccess}
-            isDarkMode={isDarkMode}
-          />
-          <PuzzleCard
-            visible={showPuzzle}
-            onClose={() => setShowPuzzle(false)}
-            puzzle={currentPuzzle}
-            isDarkMode={isDarkMode}
-          />
-        </>
-      )}
+          )}
+        </View>
+      </View>
+      <MessageModal
+        visible={showModal}
+        message={modalMessage}
+        buttonText={modalButtonText}
+        onPress={modalOnPress}
+        success={modalSuccess}
+        isDarkMode={isDarkMode}
+      />
+      <PuzzleCard
+        visible={showPuzzle}
+        onClose={() => setShowPuzzle(false)}
+        puzzle={currentPuzzle}
+        isDarkMode={isDarkMode}
+      />
     </SafeAreaView>
   );
 }
